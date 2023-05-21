@@ -12,4 +12,5 @@ export type Placement = {
   x: Coordinates['x']
   y: Coordinates['y']
   isSolidForBody: (coordinates: Coordinates) => boolean
+  addsItemToInventoryOnCollide: (coordinates: Coordinates) => Placement[]
 }

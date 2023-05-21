@@ -21,7 +21,10 @@ const heroSkinMap = {
 }
 
 export class PlayerPlacement extends Placement {
-  constructor(properties: Placement, level: LevelState) {
+  constructor(
+    properties: { id: string | number; x: number; y: number; type: string },
+    level: LevelState,
+  ) {
     super(properties, level)
     this.debug = 0
   }
@@ -87,6 +90,15 @@ export class PlayerPlacement extends Placement {
     const { x, y } = directionUpdateMap[this.movingPixelDirection]
     this.x += x
     this.y += y
+    this.handleCollisions()
+  }
+
+  handleCollisions() {
+    const collision = new Collision(this, this.level)
+    const collideThatAddsToInventory = collision.withPlacementAddsToInventory()
+    if (collideThatAddsToInventory) {
+      console.log('Handle Collision!', collideThatAddsToInventory)
+    }
   }
 
   getFrame(): FrameCoordinates {

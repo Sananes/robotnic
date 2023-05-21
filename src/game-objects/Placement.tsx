@@ -21,7 +21,10 @@ export class Placement {
   protected spriteFacingDirection: string
   protected spriteWalkFrame: number
 
-  constructor(properties: Placement, level: LevelState) {
+  constructor(
+    properties: { id: string | number; x: number; y: number; type: string },
+    level: LevelState,
+  ) {
     this.id = properties.id
     this.type = properties.type
     this.x = properties.x
@@ -40,6 +43,10 @@ export class Placement {
 
   isSolidForBody() {
     return false
+  }
+
+  addsItemToInventoryOnCollide(): string {
+    return ''
   }
 
   displayXY() {

@@ -1,4 +1,3 @@
-import { Level } from '~/components/level-layout/RenderLevel/RenderLevel'
 import { Coordinates, Placement } from '~/types'
 
 export class Collision {
@@ -9,7 +8,7 @@ export class Collision {
   public y: number
   constructor(
     forBody: { x: number; y: number },
-    level: Level,
+    level: any,
     position: Coordinates | null = null,
   ) {
     this.forBody = forBody
@@ -31,8 +30,14 @@ export class Collision {
   }
 
   withSolidPlacement() {
-    return this.placementsAtPosition.find((placement) =>
+    return this.placementsAtPosition.find((placement: Placement) =>
       placement.isSolidForBody(this.forBody),
+    )
+  }
+
+  withPlacementAddsToInventory() {
+    return this.placementsAtPosition.find((placement: Placement) =>
+      placement.addsItemToInventoryOnCollide(this.forBody),
     )
   }
 }

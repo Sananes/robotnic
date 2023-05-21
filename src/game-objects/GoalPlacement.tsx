@@ -4,7 +4,10 @@ import TILES from '~/helpers/tiles'
 import { LevelState } from '~/classes/LevelState'
 
 export class GoalPlacement extends Placement {
-  constructor(properties: Placement, level: LevelState) {
+  constructor(
+    properties: { id: string | number; x: number; y: number; type: string },
+    level: LevelState,
+  ) {
     super(properties, level)
   }
 
