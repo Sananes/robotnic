@@ -7,6 +7,7 @@ import {
   directionUpdateMap,
   HERO_RUN_1,
   HERO_RUN_2,
+  PLACEMENT_TYPE_CELEBRATION,
   Z_INDEX_LAYER_SIZE,
 } from '~/helpers/const'
 import TILES from '~/helpers/tiles'
@@ -97,7 +98,18 @@ export class PlayerPlacement extends Placement {
     const collision = new Collision(this, this.level)
     const collideThatAddsToInventory = collision.withPlacementAddsToInventory()
     if (collideThatAddsToInventory) {
-      console.log('Handle Collision!', collideThatAddsToInventory)
+      collideThatAddsToInventory.collect()
+      this.level.addPlacement({
+        type: PLACEMENT_TYPE_CELEBRATION,
+        x: this.x,
+        y: this.y,
+      })
+    }
+
+    const completesLevel = collision.withCompletesLevel()
+
+    if (completesLevel) {
+      this.level.completeLevel()
     }
   }
 

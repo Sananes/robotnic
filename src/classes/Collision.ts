@@ -36,8 +36,16 @@ export class Collision {
   }
 
   withPlacementAddsToInventory() {
-    return this.placementsAtPosition.find((placement: Placement) =>
-      placement.addsItemToInventoryOnCollide(this.forBody),
+    return this.placementsAtPosition.find(
+      (placement: Placement) =>
+        !placement.hasBeenCollected &&
+        placement.addsItemToInventoryOnCollide(this.forBody),
+    )
+  }
+
+  withCompletesLevel() {
+    return this.placementsAtPosition.find((placement) =>
+      placement.completesLevelOnCollide(),
     )
   }
 }

@@ -10,7 +10,7 @@ import { LevelState } from '~/classes/LevelState'
 
 export class Placement {
   public type: string
-  private id: string | number
+  public id: number
   public x: number
   public y: number
   protected level: LevelState
@@ -20,6 +20,7 @@ export class Placement {
   protected debug: number
   protected spriteFacingDirection: string
   protected spriteWalkFrame: number
+  public hasBeenCollected: boolean
 
   constructor(
     properties: { id: string | number; x: number; y: number; type: string },
@@ -37,6 +38,8 @@ export class Placement {
     this.movingPixelDirection = DIRECTION_RIGHT
     this.spriteFacingDirection = DIRECTION_RIGHT
     this.spriteWalkFrame = 0
+
+    this.hasBeenCollected = false
   }
 
   tick() {}
@@ -47,6 +50,10 @@ export class Placement {
 
   addsItemToInventoryOnCollide(): string {
     return ''
+  }
+
+  completesLevelOnCollide() {
+    return false
   }
 
   displayXY() {
@@ -75,6 +82,10 @@ export class Placement {
       default:
         return [x, y + progressPixels]
     }
+  }
+
+  collect() {
+    this.hasBeenCollected = true
   }
 
   zIndex() {

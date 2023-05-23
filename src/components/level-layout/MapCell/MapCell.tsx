@@ -10,12 +10,14 @@ interface MapCellProps {
 }
 export default function MapCell(_props: MapCellProps & SpriteProps) {
   const props = mergeProps(_props)
+  const x = props.x
+  const y = props.y
   return (
     <div
       style={{
         position: 'absolute',
-        left: toCellPx(props.x),
-        top: toCellPx(props.y),
+        left: toCellPx(x),
+        top: toCellPx(y),
       }}
     >
       <Sprite size={props.size} frameCoordinates={props.frameCoordinates} />

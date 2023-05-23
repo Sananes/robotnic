@@ -1,4 +1,12 @@
-import { createEffect, createSignal, onCleanup, Show, Suspense } from 'solid-js'
+import {
+  createEffect,
+  createRenderEffect,
+  createSignal,
+  onCleanup,
+  onMount,
+  Show,
+  Suspense,
+} from 'solid-js'
 import { THEME_BACKGROUNDS } from '~/helpers/const'
 
 import LevelBackgroundTilesLayer from '../LevelBackgroundTilesLayer/LevelBackgroundTilesLayer'
@@ -6,6 +14,10 @@ import styles from './RenderLevel.module.css'
 import { LevelState } from '~/classes/LevelState'
 import { PlayerPlacement } from '~/game-objects/PlayerPlacement'
 import { GoalPlacement } from '~/game-objects/GoalPlacement'
+import FlourCount from '~/components/hud/FlourCount'
+import LevelCompleteMessage from '~/components/hud/LevelCompleteMessage'
+import { currentLevel } from '~/routes'
+import { createStore } from 'solid-js/store'
 
 export default function RenderLevel() {
   const [level, setLevel] = createSignal<
@@ -21,7 +33,7 @@ export default function RenderLevel() {
   >(null)
 
   createEffect(() => {
-    const levelState = new LevelState('1-1', (newState) => {
+    const levelState = new LevelState(currentLevel(), (newState) => {
       setLevel(newState)
     })
 
@@ -41,40 +53,27 @@ export default function RenderLevel() {
         >
           <div class={styles.gameScreen}>
             <LevelBackgroundTilesLayer level={level() as LevelState} />
-            {/*<For each={level.placements}>*/}
-            {/*  {(placement) => {*/}
-            {/*    const [x, y] = placement.displayXY()*/}
+            {level()
+              ?.placements.filter((placement) => !placement.hasBeenCollected)
+              .map((placement) => {
+                const [x, y] = placement.displayXY()
 
-            {/*    return (*/}
-            {/*      <div*/}
-            {/*        style={{*/}
-            {/*          position: 'absolute',*/}
-            {/*          transform: `translate3d(${x}px, ${y}px, 0px`,*/}
-            {/*        }}*/}
-            {/*      >*/}
-            {/*        {placement.debug}*/}
-            {/*        {placement.renderComponent()}*/}
-            {/*      </div>*/}
-            {/*    )*/}
-            {/*  }}*/}
-            {/*</For>*/}
-            {level()?.placements.map((placement) => {
-              const [x, y] = placement.displayXY()
-
-              return (
-                <div
-                  style={{
-                    position: 'absolute',
-                    transform: `translate3d(${x}px, ${y}px, 0px`,
-                    'z-index': placement.zIndex(),
-                  }}
-                >
-                  {placement.renderComponent()}
-                </div>
-              )
-            })}
-            {/*<LevelPlacementsLayer level={level} />*/}
+                return (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      transform: `translate3d(${x}px, ${y}px, 0px`,
+                      'z-index': placement.zIndex(),
+                    }}
+                  >
+                    {placement.renderComponent()}
+                  </div>
+                )
+              })}
+            {/*<LevelPlacementsLayer level()={level()} />*/}
           </div>
+          <FlourCount level={level()} />
+          {level().isCompleted && <LevelCompleteMessage />}
         </div>
       </Show>
     </Suspense>
