@@ -18,6 +18,7 @@ import FlourCount from '~/components/hud/FlourCount'
 import LevelCompleteMessage from '~/components/hud/LevelCompleteMessage'
 import { currentLevel } from '~/routes'
 import { createStore } from 'solid-js/store'
+import LevelPlacementsLayer from '~/components/level-layout/LevelPlacementsLayer/LevelPlacementsLayer'
 
 export default function RenderLevel() {
   const [level, setLevel] = createSignal<
@@ -53,24 +54,7 @@ export default function RenderLevel() {
         >
           <div class={styles.gameScreen}>
             <LevelBackgroundTilesLayer level={level() as LevelState} />
-            {level()
-              ?.placements.filter((placement) => !placement.hasBeenCollected)
-              .map((placement) => {
-                const [x, y] = placement.displayXY()
-
-                return (
-                  <div
-                    style={{
-                      position: 'absolute',
-                      transform: `translate3d(${x}px, ${y}px, 0px`,
-                      'z-index': placement.zIndex(),
-                    }}
-                  >
-                    {placement.renderComponent()}
-                  </div>
-                )
-              })}
-            {/*<LevelPlacementsLayer level()={level()} />*/}
+            <LevelPlacementsLayer level={level()} />
           </div>
           <FlourCount level={level()} />
           {level().isCompleted && <LevelCompleteMessage />}
