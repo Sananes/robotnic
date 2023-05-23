@@ -38,8 +38,6 @@ export default function RenderLevel() {
       setLevel(newState)
     })
 
-    setLevel(levelState.getState())
-
     onCleanup(() => levelState.destroy())
   })
 
