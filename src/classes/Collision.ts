@@ -1,4 +1,5 @@
-import { Coordinates, Placement } from '~/types'
+import { Placement } from '~/game-objects/Placement'
+import { Coordinates } from '~/types'
 
 export class Collision {
   private readonly forBody: any
@@ -46,6 +47,12 @@ export class Collision {
   withCompletesLevel() {
     return this.placementsAtPosition.find((placement) =>
       placement.completesLevelOnCollide(),
+    )
+  }
+
+  withLock() {
+    return this.placementsAtPosition.find((placement) =>
+      placement.canBeUnlocked(),
     )
   }
 }

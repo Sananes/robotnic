@@ -22,20 +22,21 @@ const heroSkinMap = {
 }
 
 export class PlayerPlacement extends Placement {
-  constructor(
-    properties: { id: string | number; x: number; y: number; type: string },
-    level: LevelState,
-  ) {
+  constructor(properties: Placement, level: LevelState) {
     super(properties, level)
-    this.debug = 0
   }
 
   controllerMoveRequested(direction: string) {
     if (this.movingPixelsRemaining > 0) return
 
-    // Make sure next space is available
-    const canMove = this.canMoveToNextDestination(direction)
-    if (!canMove) return
+    const possibleLock = this.getLockAtNextPosition(direction)
+
+    if (possibleLock) {
+      possibleLock.unlock()
+      return
+    }
+
+    if (this.isSolidAtNextPosition(direction)) return
 
     this.movingPixelsRemaining = 16
     this.movingPixelDirection = direction
@@ -43,20 +44,31 @@ export class PlayerPlacement extends Placement {
     this.updateWalkFrame()
   }
 
-  canMoveToNextDestination(direction: string) {
+  getCollisionAtNextPosition(direction: string) {
     const { x, y } = directionUpdateMap[direction]
     const nextX = this.x + x
     const nextY = this.y + y
-    const isOutOfBounds = this.level.isPositionOutOfBounds(nextX, nextY)
-
-    if (isOutOfBounds) return false
-
-    const collision = new Collision(this, this.level, {
+    return new Collision(this, this.level, {
       x: nextX,
       y: nextY,
     })
+  }
 
-    return !collision.withSolidPlacement()
+  getLockAtNextPosition(direction) {
+    const collision = this.getCollisionAtNextPosition(direction)
+    return collision.withLock()
+  }
+
+  isSolidAtNextPosition(direction: string) {
+    const collision = this.getCollisionAtNextPosition(direction)
+    const isOutOfBounds = this.level.isPositionOutOfBounds(
+      collision.x,
+      collision.y,
+    )
+
+    if (isOutOfBounds) return true
+
+    return Boolean(collision.withSolidPlacement())
   }
 
   updateFacingDirection() {

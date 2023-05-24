@@ -6,6 +6,7 @@ import { GameLoop } from '~/classes/GameLoop'
 import { DirectionControls } from '~/classes/DirectionControls'
 import Levels from '~/levels/LevelsMap'
 import { Level } from '~/types'
+import { Inventory } from './Inventory'
 
 export class LevelState {
   public id: string
@@ -17,6 +18,7 @@ export class LevelState {
   private directionControls: DirectionControls
   private playerRef: PlayerPlacement | undefined
   public isCompleted: boolean = false
+  inventory: Inventory
 
   constructor(
     public levelId: string,
@@ -47,6 +49,9 @@ export class LevelState {
     this.playerRef = this.placements.find(
       (player) => player.type === PLACEMENT_TYPE_PLAYER,
     ) as PlayerPlacement
+
+    this.inventory = new Inventory()
+
     this.start()
   }
 

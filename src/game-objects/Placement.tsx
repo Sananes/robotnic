@@ -17,13 +17,13 @@ export class Placement {
   public travelPixelsPerFrame: number
   public movingPixelsRemaining: number
   public movingPixelDirection: string
-  protected debug: number
   protected spriteFacingDirection: string
   protected spriteWalkFrame: number
   public hasBeenCollected: boolean
+  color: any
 
   constructor(
-    properties: { id: string | number; x: number; y: number; type: string },
+    properties: { id: number; x: number; y: number; type: string },
     level: LevelState,
   ) {
     this.id = properties.id
@@ -31,7 +31,6 @@ export class Placement {
     this.x = properties.x
     this.y = properties.y
     this.level = level
-    this.debug = 0
 
     this.travelPixelsPerFrame = 1.5
     this.movingPixelsRemaining = 0
@@ -86,6 +85,11 @@ export class Placement {
 
   collect() {
     this.hasBeenCollected = true
+    this.level.inventory.add(this.addsItemToInventoryOnCollide())
+  }
+
+  canBeUnlocked(): boolean {
+    return false
   }
 
   zIndex() {

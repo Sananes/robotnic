@@ -12,5 +12,5 @@ export type Level = {
   theme: string
   tilesWidth: number
   tilesHeight: number
-  placements: { x: number; y: number; type: string }[]
+  placements: { x: number; y: number; type: string; color?: string }[]
 }
