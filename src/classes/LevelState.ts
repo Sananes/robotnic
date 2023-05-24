@@ -1,35 +1,29 @@
-import {
-  LEVEL_THEMES,
-  PLACEMENT_TYPE_FLOUR,
-  PLACEMENT_TYPE_GOAL,
-  PLACEMENT_TYPE_PLAYER,
-  PLACEMENT_TYPE_WALL,
-} from '~/helpers/const'
+import { PLACEMENT_TYPE_PLAYER } from '~/helpers/const'
 import { placementFactory } from '~/classes/PlacementFactory'
 import { PlayerPlacement } from '~/game-objects/PlayerPlacement'
-import { GoalPlacement } from '~/game-objects/GoalPlacement'
 import { Placement } from '~/game-objects/Placement'
 import { GameLoop } from '~/classes/GameLoop'
 import { DirectionControls } from '~/classes/DirectionControls'
 import Levels from '~/levels/LevelsMap'
+import { Level } from '~/types'
 
 export class LevelState {
   public id: string
-  public readonly theme: string
-  public readonly tilesWidth: number
-  public readonly tilesHeight: number
-  public placements: (PlayerPlacement | GoalPlacement)[]
+  public readonly theme!: string
+  public readonly tilesWidth!: number
+  public readonly tilesHeight!: number
+  public placements: Placement[] = []
   public gameLoop: GameLoop | undefined
   private directionControls: DirectionControls
   private playerRef: PlayerPlacement | undefined
-  private isCompleted: boolean
+  public isCompleted: boolean = false
 
   constructor(
     public levelId: string,
     public onEmit: (newState: {
       tilesWidth: number
       theme: string
-      placements: (PlayerPlacement | GoalPlacement)[]
+      placements: Level['placements']
       tilesHeight: number
       isCompleted: boolean
     }) => void,
@@ -37,11 +31,6 @@ export class LevelState {
     this.id = levelId
     this.onEmit = onEmit
     this.directionControls = new DirectionControls()
-
-    this.start()
-  }
-
-  start() {
     this.isCompleted = false
 
     const levelData = Levels[this.id]
@@ -54,12 +43,14 @@ export class LevelState {
         return placementFactory.createPlacement(config, this)
       },
     ) as unknown as Placement[]
-    this.isCompleted = false
 
     this.playerRef = this.placements.find(
       (player) => player.type === PLACEMENT_TYPE_PLAYER,
     ) as PlayerPlacement
+    this.start()
+  }
 
+  start() {
     this.startGameLoop()
   }
 
@@ -103,7 +94,7 @@ export class LevelState {
 
   completeLevel() {
     this.isCompleted = true
-    this.gameLoop.stop()
+    this.gameLoop?.stop()
   }
 
   getState() {

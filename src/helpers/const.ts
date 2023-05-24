@@ -2,7 +2,7 @@ import { Coordinates } from '~/types'
 
 export const CELL_SIZE = 16
 export const Z_INDEX_LAYER_SIZE = 10
-export const SPRITE_SHEET_SOURCE = '/ciabattas-revenge-sprites.png'
+export const SPRITE_SHEET_SOURCE = '/sprite.png'
 
 export type LEVEL_THEME_COLORS = 'YELLOW' | 'BLUE' | 'GREEN' | 'PINK' | 'GRAY'
 

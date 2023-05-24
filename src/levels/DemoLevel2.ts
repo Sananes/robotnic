@@ -5,8 +5,9 @@ import {
   PLACEMENT_TYPE_PLAYER,
   PLACEMENT_TYPE_WALL,
 } from '~/helpers/const'
+import { Level } from '~/types'
 
-const level = {
+const level: Level = {
   theme: LEVEL_THEMES.YELLOW,
   tilesWidth: 8,
   tilesHeight: 5,
