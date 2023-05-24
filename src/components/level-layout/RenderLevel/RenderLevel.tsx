@@ -1,6 +1,5 @@
 import {
   createEffect,
-  createRenderEffect,
   createSignal,
   onCleanup,
   onMount,
@@ -17,7 +16,6 @@ import { GoalPlacement } from '~/game-objects/GoalPlacement'
 import FlourCount from '~/components/hud/FlourCount'
 import LevelCompleteMessage from '~/components/hud/LevelCompleteMessage'
 import { currentLevel } from '~/routes'
-import { createStore } from 'solid-js/store'
 import LevelPlacementsLayer from '~/components/level-layout/LevelPlacementsLayer/LevelPlacementsLayer'
 
 export default function RenderLevel() {

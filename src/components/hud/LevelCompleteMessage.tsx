@@ -1,6 +1,5 @@
 import { currentLevel, setCurrentLevel } from '~/routes'
 import LevelsMap from '~/levels/LevelsMap'
-import levelsMap from '~/levels/LevelsMap'
 
 export default function LevelCompleteMessage(props) {
   return (
